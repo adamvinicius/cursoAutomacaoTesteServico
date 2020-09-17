@@ -11,6 +11,7 @@ import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import utils.RestUtils;
 
 public class ConsultaCEPTest {
 	String url = "http://viacep.com.br/ws/";
@@ -20,11 +21,12 @@ public class ConsultaCEPTest {
 		//http://viacep.com.br/ws/{{CEP}}/json/
 		String cep = "04055041";
 		String endpoint = cep.concat("/json/");
+		RestUtils.setEndpoint(endpoint);
+				
+		RestUtils.setUrl(url);
 		
-		RestAssured.baseURI = url;
-		
-		Response response = get(endpoint);
-		assertEquals(200, response.statusCode());
+		RestUtils.get();
+		assertEquals(200, RestUtils.getStatusCode());
 		
 	}
 	
@@ -32,74 +34,46 @@ public class ConsultaCEPTest {
 	public void validaDadosCEP() {
 		String cep = "04055041";
 		String endpoint = cep.concat("/json/");
+		RestUtils.setEndpoint(endpoint);
+		
 		LinkedHashMap<String, String> header = new LinkedHashMap<>();
 		header.put("client-id", "curso");
 		header.put("Authorization", "Basic YWRhbTp0ZXN0ZQ==");
 		
-		RestAssured.baseURI = url;
+		RestUtils.setUrl(url);
 		
-		RequestSpecification request = initRequest(ContentType.JSON, header);
-		Response response = request
-		.when()
-		.get(endpoint)
-		.then()
-		.statusCode(200)
-		.extract()
-		.response();
+		RestUtils.get(header);
 		
-		JsonPath json = response.getBody().jsonPath();
 		
-		assertEquals("Rua Mauro", json.get("logradouro"));
-		assertEquals("Saúde", json.get("bairro"));
-		assertEquals("São Paulo", json.get("localidade"));
+		assertEquals(200, RestUtils.getStatusCode());
+		assertEquals("Rua Mauro", RestUtils.getValue("logradouro"));
+		assertEquals("Saúde", RestUtils.getValue("bairro"));
+		assertEquals("São Paulo", RestUtils.getValue("localidade"));
 	}
 	
 	@Test
 	public void validaDadosCEPParam() {
 		String cep = "04055041";
 		String endpoint = cep.concat("/json/");
+		RestUtils.setEndpoint(endpoint);
+		
 		LinkedHashMap<String, String> param = new LinkedHashMap<>();
 		param.put("client-id", "curso");
 		param.put("nome", "Adam");
 		
-		RestAssured.baseURI = url;
+		RestUtils.setUrl(url);
 		
-		Response response = initRequest(ContentType.JSON)
-		.params(param)
-		.when()
-		.get(endpoint)
-		.then()
-		.statusCode(200)
-		.extract()
-		.response();
+		RestUtils.getParams(param);
 		
-		JsonPath json = response.getBody().jsonPath();
 		
-		assertEquals("Rua Mauro", json.get("logradouro"));
-		assertEquals("Saúde", json.get("bairro"));
-		assertEquals("São Paulo", json.get("localidade"));
+		assertEquals(200, RestUtils.getStatusCode());
+		assertEquals("Rua Mauro", RestUtils.getValue("logradouro"));
+		assertEquals("Saúde", RestUtils.getValue("bairro"));
+		assertEquals("São Paulo", RestUtils.getValue("localidade"));
 	}
 	
-	public RequestSpecification initRequest(ContentType contentType, LinkedHashMap<String, String> header) {
-		return RestAssured.given()
-		.relaxedHTTPSValidation()
-		.contentType(contentType)
-		.headers(header);
-	}
 	
-	public RequestSpecification initRequest(ContentType contentType) {
-		return RestAssured.given()
-		.relaxedHTTPSValidation()
-		.contentType(contentType);
-	}
 	
-	public Response get(String endpoint) {
-		return initRequest(ContentType.JSON)
-		.when()
-		.get(endpoint)
-		.then()
-		.extract()
-		.response();
-	}
+	
 	
 }
