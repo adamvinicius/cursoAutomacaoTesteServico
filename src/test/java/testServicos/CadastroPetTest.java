@@ -10,6 +10,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import entities.Category;
+import entities.Pet;
+import entities.Tag;
 import utils.RestUtils;
 
 public class CadastroPetTest {
@@ -33,25 +36,16 @@ public class CadastroPetTest {
 		RestUtils.setUrl(url);
 		RestUtils.setEndpoint(endpoint);
 				
-		LinkedHashMap<String, Object> json = new LinkedHashMap<>();
-		LinkedHashMap<String, Object> category = new LinkedHashMap<>();
-		List<String> listPhoto = new ArrayList<String>();
-		LinkedHashMap<String, Object> tag = new LinkedHashMap<>();
-		List<LinkedHashMap<String, Object>> listTags = new ArrayList<LinkedHashMap<String,Object>>();
-		
-		category.put("id", 0);
-		category.put("name", "teste api");
-		json.put("category", category);
-		json.put("name", "doggie");
+		Category category = new Category(0, "teste api");
+		List<Object> listPhoto = new ArrayList<Object>();
 		listPhoto.add("string");
-		json.put("photoUrls", listPhoto);
-		tag.put("id", 0);
-		tag.put("name", "tag");
-		listTags.add(tag);
-		json.put("tags", listTags);
-		json.put("status", "available");
+		Tag tag = new Tag(0, "tag");
+		List<LinkedHashMap<String, Object>> tags = new ArrayList<LinkedHashMap<String,Object>>();
+		tags.add(tag.get());
+		Pet pet = new Pet(category, "doggie", listPhoto, tags, "available");
 		
-		RestUtils.post(json);
+		
+		RestUtils.post(pet.get());
 		assertEquals(200, RestUtils.getStatusCode());
 		
 		assertEquals("teste api", RestUtils.getValue("category.name"));

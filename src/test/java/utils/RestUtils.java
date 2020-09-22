@@ -61,6 +61,23 @@ public class RestUtils {
 				.extract().response();
 	}
 	
+	public static void postUrlEncoded(LinkedHashMap<String, String> json) {
+		response = initRequest(ContentType.URLENC)
+				.formParams(json)
+				.when().post(endpoint)
+				.then()
+				.extract().response();
+	}
+	
+	public static void postUrlEncoded(LinkedHashMap<String, String> json, LinkedHashMap<String, String> header) {
+		response = initRequest(ContentType.URLENC)
+				.formParams(json)
+				.headers(header)
+				.when().post(endpoint)
+				.then()
+				.extract().response();
+	}
+	
 	public static void get() {
 		Response response = initRequest(ContentType.JSON)
 		.when().get(endpoint)
