@@ -13,6 +13,7 @@ import org.junit.Test;
 import entities.Category;
 import entities.Pet;
 import entities.Tag;
+import massa.PetMassa;
 import utils.RestUtils;
 
 public class CadastroPetTest {
@@ -32,18 +33,24 @@ public class CadastroPetTest {
 	}
 	
 	@Test
+	public void validaErroNomeNull() {
+		RestUtils.setUrl(url);
+		RestUtils.setEndpoint(endpoint);
+				
+		Pet pet = PetMassa.geraMassa();
+		pet.remove("name");
+		RestUtils.post(pet.get());
+		assertEquals(405, RestUtils.getStatusCode());
+	}
+	
+	@Test
 	public void validaStatusCodeMap() {
 		RestUtils.setUrl(url);
 		RestUtils.setEndpoint(endpoint);
 				
-		Category category = new Category(0, "teste api");
-		List<Object> listPhoto = new ArrayList<Object>();
-		listPhoto.add("string");
-		Tag tag = new Tag(0, "tag");
-		List<LinkedHashMap<String, Object>> tags = new ArrayList<LinkedHashMap<String,Object>>();
-		tags.add(tag.get());
-		Pet pet = new Pet(category, "doggie", listPhoto, tags, "available");
-		
+		Pet pet = PetMassa.geraMassa();
+
+		pet.setPet("name", "Ted");
 		
 		RestUtils.post(pet.get());
 		assertEquals(200, RestUtils.getStatusCode());
