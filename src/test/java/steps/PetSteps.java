@@ -35,5 +35,10 @@ public class PetSteps {
 	    PetMassa.id = RestUtils.getValue("id").toString();
 	}
 	
+	@Quando("altero o valor do nome do pet para {string}")
+	public void alteroOValorDoNomeDoPetPara(String name) {
+	    pet.setPet("name", name);
+	}
+	
 	
 }

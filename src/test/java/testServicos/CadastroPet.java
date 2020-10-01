@@ -16,7 +16,7 @@ import entities.Tag;
 import massa.PetMassa;
 import utils.RestUtils;
 
-public class CadastroPetTest {
+public class CadastroPet {
 	String url = "https://petstore.swagger.io/v2/";
 	String endpoint = "pet";
 	@Test

@@ -13,7 +13,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import utils.RestUtils;
 
-public class ConsultaCEPTest {
+public class ConsultaCEP {
 	String url = "http://viacep.com.br/ws/";
 	
 	@Test
