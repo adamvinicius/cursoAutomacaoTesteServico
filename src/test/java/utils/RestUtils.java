@@ -129,6 +129,14 @@ public class RestUtils {
 	public static int getStatusCode() {
 		return getResponse().statusCode();
 	}
+
+	public static void put(LinkedHashMap<String, Object> json) {
+		response = initRequest(ContentType.JSON)
+				.body(json)
+				.when().put(endpoint)
+				.then()
+				.extract().response();
+	}
 	
 	
 	

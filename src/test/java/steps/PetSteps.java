@@ -40,5 +40,50 @@ public class PetSteps {
 	    pet.setPet("name", name);
 	}
 	
+	@Quando("realizo uma requisicao de get do pet utilizando o id")
+	public void realizoUmaRequisicaoDeGetDoPetUtilizandoOId() {
+	    String id = PetMassa.id;
+	    RestUtils.setEndpoint(endpoint+"/"+id);
+	    RestUtils.get();
+	}
+
+	@Quando("altero o valor do id do pet para o armazenado")
+	public void alteroOValorDoIdDoPetParaOArmazenado() {
+	    String id = PetMassa.id;
+	    pet.setPet("id", id);
+	}
+	@Quando("realizo uma requisicao de put do pet")
+	public void realizoUmaRequisicaoDePutDoPet() {
+		RestUtils.setEndpoint(endpoint);
+	    RestUtils.put(pet.get());
+	}
+	
+	@Quando("realizo uma requisicao do post do pet {string} e guardo o id")
+	public void realizoUmaRequisicaoDoPostDoPetEGuardoOId(String name) {
+		pet.setPet("name", name);
+		RestUtils.post(pet.get());
+		PetMassa.id = RestUtils.getValue("id").toString();
+	}
+
+
+
+	@Entao("realizo uma requisicao de get utilizando o id e valido o nome {string}")
+	public void realizoUmaRequisicaoDeGetUtilizandoOIdEValidoONome(String name) {
+		String id = PetMassa.id;
+	    RestUtils.setEndpoint(endpoint+"/"+id);
+	    RestUtils.get();
+	    assertEquals(name, RestUtils.getValue("name"));
+	    
+	}
+	@Quando("realizo uma requisicao do put do pet {string} com o id")
+	public void realizoUmaRequisicaoDoPutDoPetComOId(String name) {
+		pet.setPet("name", name);
+		String id = PetMassa.id;
+	    pet.setPet("id", id);
+	    RestUtils.setEndpoint(endpoint);
+	    RestUtils.put(pet.get());
+		
+	}
+	
 	
 }
